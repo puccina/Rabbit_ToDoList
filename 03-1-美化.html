@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>兔子ToDo</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #app {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    input {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #5cb85c;
+      color: white;
+      cursor: pointer;
+      outline: none;
+    }
+    button:hover {
+      background-color: #4cae4c;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background-color: #f9f9f9;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    li:hover {
+      background-color: #f1f1f1;
+    }
+    button.delete {
+      background-color: #d9534f;
+    }
+    button.delete:hover {
+      background-color: #c9302c;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>兔子ToDo</h1>
+    <input placeholder="请输入任务" v-model="todoname" type="text">
+    <button @click="addtodo(todoname)">添加任务</button>
+    <ul>
+      <li v-for="(item,index) in todolist" :key="item.id">
+        {{ index+1 + " . " + item.name }}
+        <button @click="del(item.id)" class="delete">x</button>
+      </li>
+    </ul>
+    <button @click="clear" v-show="isShow">全部清除</button>
+    <div>总计{{ todolist.length }}项</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> 
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!',
+        todoname: '',
+        isShow: true,
+        todolist: [
+          {id: 1, name: "跑步1000m"},
+          {id: 2, name: "跳绳200个"},
+          {id: 3, name: "游泳100m"}
+        ]
+      },
+      methods: {
+        addtodo: function (todoname) {
+          if (todoname.trim() === '') {
+            alert('请输入任务内容！');
+            return;
+          }
+          
+          this.todolist.unshift({
+            id: +new Date(),
+            name: this.todoname
+          });
+          this.todoname = '';
+          this.isShow = true;
+        },
+        del: function (id) {
+          this.todolist = this.todolist.filter(item => item.id !== id);
+        },
+        clear: function () {
+          this.todolist = [];
+          this.isShow = false;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
